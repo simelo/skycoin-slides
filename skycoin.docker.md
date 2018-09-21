@@ -107,6 +107,18 @@ docker push $IMAGE_NAME-arm32v7
 docker push $IMAGE_NAME-arm64v8
 ```
 
+---
+
+## Skycoin Docker images
+#### CrossCompiling
+
+```sh
+#!/bin/bash
+docker build --build-arg=CC=arm-linux-gnueabihf-gcc --build-arg=ARCH=arm --build-arg=GOARM=7 --build-arg=IMAGE_FROM="arm32v7/busybox" -f $DOCKERFILE_PATH -t $DOCKER_REPO:arm32v7 .
+
+docker build --build-arg=CC=aarch64-linux-gnu-gcc --build-arg=ARCH=arm64 --build-arg=IMAGE_FROM="arm64v8/busybox" -f $DOCKERFILE_PATH -t $DOCKER_REPO:arm64v8 .
+```
+
 --
 
 # What if there is no cross compilation?
@@ -114,6 +126,28 @@ docker push $IMAGE_NAME-arm64v8
 #### Example using `cgo`
 
 --
+
+## Skycoin Docker images
+#### Compiling for Arm
+
+```Dockerfile
+FROM golang:1.10-stretch AS build-go
+ARG ARCH=amd64
+ARG GOARM
+ARG CC=gcc
+
+RUN apt-get update && apt-get -y install build-essential 
+    crossbuild-essential-armhf \
+    crossbuild-essential-arm64  \
+    automake \
+    gcc-arm-linux-gnueabihf
+
+RUN GOARCH=$ARCH GOARM=$GOARM GOOS=linux CGO_ENABLED=1 CC=$CC \
+    go install -a -installsuffix cgo ./...
+...
+```
+
+---
 
 ## Skycoin Docker images
 #### Multi-stage builds
