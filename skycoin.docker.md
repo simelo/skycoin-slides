@@ -76,7 +76,7 @@ Mainly for:
 ## Skycoin Docker images
 #### skycoin/skycoin [build hook](https://github.com/skycoin/skycoin/tree/develop/docker/images/mainnet/hooks/build)
 
-```
+```sh
 #!/bin/bash
 cd ../../../
 docker build -f $DOCKERFILE_PATH -t $IMAGE_NAME .
@@ -89,9 +89,16 @@ docker build --build-arg=ARCH=arm64 --build-arg=IMAGE_FROM="arm64v8/busybox" -f 
 ---
 
 ## Skycoin Docker images
+#### Using build args with golang
+
+![GO\* build args in Dockerfile](img/docker.skycoin.buildcmd.png)
+
+---
+
+## Skycoin Docker images
 #### skycoin/skycoin [push hook](https://github.com/skycoin/skycoin/tree/develop/docker/images/mainnet/hooks/push)
 
-```
+```sh
 #!/bin/bash
 docker push $IMAGE_NAME
 docker push $IMAGE_NAME-arm32v5
@@ -99,6 +106,12 @@ docker push $IMAGE_NAME-arm32v6
 docker push $IMAGE_NAME-arm32v7
 docker push $IMAGE_NAME-arm64v8
 ```
+
+--
+
+# What if there is no cross compilation?
+
+#### Example using `cgo`
 
 --
 
@@ -120,20 +133,65 @@ Busybox? Why not Alpine ?
 #### Multi-stage builds
 
 - No images for architectures `arm6` and `arm8`
-  * ... since some moment in time during 2018
 - Includes `apk` package manager
   * Software package set in production images should be frozen
-    - ... i.e. nothing else needs to be installed
+    - Best practice : **Don’t install unnecessary packages**
     - ... generally speaking there could be exceptions
+    - **Job offer** : Images for main OS, no package manager
   * [Vulnerabilities found](https://justi.cz/security/2018/09/13/alpine-apk-rce.html) recently (2018)
 - `busybox` image works and is even smaller
 
+---
+
+## Skycoin Docker images
+#### `skycoin/skycoin` tags
+
+![skycoin/skycoin image tags](img/docker.skycoin.tags.png)
+
 --
 
-## Docker base practices
-#### Ephemeral containers
+## Skycoin Docker images
+#### `skycoin/skywire` : Multiple transient images
 
-`/data` and `/wallet` volumes
+![skycoin/skywire Dockerfile final stage](img/docker.skywire.Dockerfile.png)
 
+--
 
+## Skycoin Docker images - Suboptimal
+#### `skycoin/skycoin:release-v0.24.1` layers
+
+[![`skycoin/skycoin:release-v0.24.1` @ microbadger.com](img/docker.skycoin.badlayers.png)](https://microbadger.com/images/skycoin/skycoin:release-v0.24.1)
+
+##### microbadger.com
+
+--
+
+## Skycoin Docker images - Solution
+#### How to reduce number of layers?
+
+- Transient containers as usual
+- Copy files in source repository into transient build image
+- Transient image folder with fs layout needed in production
+- Create tar archive
+- Create temp volume in final image
+- Copy the tar archive onto temp volume
+- Extract .tar contents, then remove it
+
+--
+
+## Skycoin Docker images - Results
+#### `skycoin/skycoin:feature-stdevNorge-1903` layers
+
+[![`skycoin/skycoin:feature-stdevNorge-1903` @ microbadger.com](img/docker.skycoin.layers.png)](https://microbadger.com/images/skycoin/skycoin:feature-stdevNorge-1903)
+
+##### microbadger.com
+
+--
+
+## Skycoin Docker images
+#### Other best practices
+
+- Ephemeral containers : `/data` and `/wallet` volumes
+- Decouple applications
+  * Interactions with external services via REST API
 
