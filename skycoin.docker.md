@@ -53,8 +53,10 @@ Mainly for:
   * Switch smoothly from one OS to the other
   * Upgrades in programming language tools needed by your app
 - Software version, build info
-- Dockerfile command arguments
-  * Golang `ARCH`
+- `RUN` command arguments
+  * e.g. Golang `ARCH`
+- Support multiple versions of tools , languages , ...
+  * e.g. py2 vs py3
 
 ---
 
@@ -107,7 +109,13 @@ docker push $IMAGE_NAME-arm32v7
 docker push $IMAGE_NAME-arm64v8
 ```
 
----
+--
+
+# What if there is no cross compilation?
+
+#### Example using `cgo`
+
+--
 
 ## Skycoin Docker images
 #### CrossCompiling
@@ -119,33 +127,12 @@ docker build --build-arg=CC=arm-linux-gnueabihf-gcc --build-arg=ARCH=arm --build
 docker build --build-arg=CC=aarch64-linux-gnu-gcc --build-arg=ARCH=arm64 --build-arg=IMAGE_FROM="arm64v8/busybox" -f $DOCKERFILE_PATH -t $DOCKER_REPO:arm64v8 .
 ```
 
---
-
-# What if there is no cross compilation?
-
-#### Example using `cgo`
-
---
+---
 
 ## Skycoin Docker images
-#### Compiling for Arm
+#### `skycoin/skywire` : Compiling for ARM
 
-```Dockerfile
-FROM golang:1.10-stretch AS build-go
-ARG ARCH=amd64
-ARG GOARM
-ARG CC=gcc
-
-RUN apt-get update && apt-get -y install build-essential 
-    crossbuild-essential-armhf \
-    crossbuild-essential-arm64  \
-    automake \
-    gcc-arm-linux-gnueabihf
-
-RUN GOARCH=$ARCH GOARM=$GOARM GOOS=linux CGO_ENABLED=1 CC=$CC \
-    go install -a -installsuffix cgo ./...
-...
-```
+![skycoin/skywire build args](img/docker.skywire.buildargs.png)
 
 ---
 
