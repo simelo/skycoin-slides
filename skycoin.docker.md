@@ -58,7 +58,7 @@
 --
 
 ## Skycoin Docker images 
-#### Use build arguments
+#### `skycoin/skycoin` build arguments
 
 ![Build args in skycoin/skycoin image](img/docker.skycoin.buildargs.png)
 
@@ -195,8 +195,8 @@ Busybox? Why not Alpine ?
 
 ---
 
-## Skycoin Docker images
-#### `skycoin/skycoin:release-v0.24.1` layers
+## Skycoin Docker images - Layers
+#### `skycoin/skycoin:release-v0.24.1`
 
 [![`skycoin/skycoin:release-v0.24.1` @ microbadger.com](img/docker.skycoin.layers.0.24.1.png)](https://microbadger.com/images/skycoin/skycoin:release-v0.24.1)
 
@@ -306,22 +306,10 @@ ERROR: Build in 'stdevNorge_t1903_docker_reduce_image:/docker/images/mainnet/Doc
 
 --
 
-## Skycoin Docker images
-#### Single layer for `skycoin/skycoin` image
+## Skycoin Docker images - Layers
+#### `skycoin/skycoin:feature-stdevNorge-1903`
 
-```
-$ docker history --no-trunc simelotech/skycoin:feature-stdevNorge-1903
-IMAGE                CREATED             CREATED BY                                                                                                                          SIZE                COMMENT
-sha256:d77e7bf9b83   About an hour ago   /bin/sh -c #(nop)  ENTRYPOINT ["docker_launcher.sh" "--web-interface-addr=0.0.0.0" "--gui-dir=/usr/local/skycoin/src/gui/static"]   0B
-<missing>            About an hour ago   /bin/sh -c #(nop)  EXPOSE 6000 6420                                                                                                 0B
-<missing>            About an hour ago   /bin/sh -c #(nop)  VOLUME [/data/.skycoin]                                                                                          0B
-<missing>            About an hour ago   /bin/sh -c #(nop)  VOLUME [/wallet]                                                                                                 0B
-<missing>            About an hour ago   /bin/sh -c #(nop) COPY multi:a391c93b86aa205585f38d15670e32ced770a2b67783bc632460b2b9cb96ddad in /                                  68.2MB
-<missing>            About an hour ago   /bin/sh -c #(nop)  ENV RPC_ADDR=http://0.0.0.0:6420 DATA_DIR=/data/.skycoin WALLET_DIR=/wallet WALLET_NAME=.wlt                     0B
-<missing>            About an hour ago   /bin/sh -c #(nop)  ENV COIN=skycoin                                                                                                 0B
-<missing>            7 weeks ago         /bin/sh -c #(nop)  CMD ["sh"]                                                                                                       0B
-<missing>            7 weeks ago         /bin/sh -c #(nop) ADD file:96fda64a6b725d4df5249c12e32245e2f02469ff637c38077740f4984cd883dd in /                                    1.16MB
-```
+[![`skycoin/skycoin:feature-stdevNorge-1903` @ microbadger.com](img/docker.skycoin.layers.feature-stdevNorge-1903.png)](https://microbadger.com/images/skycoin/skycoin:feature-stdevNorge-1903)
 
 ---
 
